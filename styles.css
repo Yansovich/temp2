@@ -39,6 +39,10 @@ body {
     align-items: center;
 }
 
+.bonus {
+    background: yellow;
+}
+
 .wave {
     height: 150px;
     background-color: blue;
