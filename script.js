@@ -58,6 +58,7 @@ function checkResult() {
         console.log("WA", wrongAnswers);
         if (wrongAnswers === 3) {
             alert('game over')
+            finishGame()
         }
         reduceScore()
     }
@@ -91,24 +92,22 @@ document.addEventListener('keydown', (event) => {
 // счет 
 function increaseScore() {
 
-    // let previousScore = 0
-
     if (correctAnswers === 1) {
-        let previousScore = 10;
-        score.textContent = previousScore;
+        currentScore = 10;
+        score.textContent = currentScore;
     } else {
-        currentScore = previousScore + 1 + 10;
+        currentScore = currentScore + 1 + 10;
     }
     score.textContent = currentScore;
     console.log(currentScore);
 }
 
 function reduceScore() {
-    if (wrongAnswers > 0) { // Обработка неправильного ответа
+    if (wrongAnswers > 0) { 
         if (wrongAnswers === 1) {
-            currentScore = currentScore - 5; // Первое неправильное
+            currentScore = currentScore - 10; 
         } else {
-            currentScore = currentScore - 6; // Последующие
+            currentScore = currentScore - 1 - 10; 
         }
     }
     if (currentScore < 0) {
@@ -117,7 +116,6 @@ function reduceScore() {
     score.textContent = currentScore;
     console.log(currentScore);
 }
-
 
 function createDrop() {
     const drop = document.createElement('div');
@@ -148,8 +146,6 @@ function createDrop() {
     animateDrop(drop);
 }
 
-
-
 function animateDrop(drop) {
     drop.animate([{ transform: 'translateY(0)' }, { transform: 'translateY(calc(100vh - 150px))' }], {
         duration: animationDuration,
@@ -163,8 +159,9 @@ function animateDrop(drop) {
             wave.style.height = `${wave.clientHeight + 20}px`;
             clearInterval(checkInterval);
         }
-        if (wave.style.height === '650px') {
+        if (wave.style.height === '210px') {
             alert('game over')
+            finishGame()
         }
     }, 500)
 }
@@ -194,4 +191,12 @@ function increaseSpeed() {
     }
 }
 
-setInterval(createDrop, interval);
+const intervalId =  setInterval(createDrop, interval);
+
+function finishGame() {
+    clearInterval(intervalId)
+    drops = [];
+    correctAnswers = 0;
+    wrongAnswers = 0;
+    currentScore = 0;
+}
