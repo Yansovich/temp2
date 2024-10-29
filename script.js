@@ -56,6 +56,9 @@ function checkResult() {
         wave.style.height = `${wave.clientHeight + 20}px`;
         // console.log('Неправильный ответ:', answer);
         console.log("WA", wrongAnswers);
+       
+        // addShakeClass()
+       
         if (wrongAnswers === 3) {
             alert('game over')
             finishGame()
@@ -103,11 +106,11 @@ function increaseScore() {
 }
 
 function reduceScore() {
-    if (wrongAnswers > 0) { 
+    if (wrongAnswers > 0) {
         if (wrongAnswers === 1) {
-            currentScore = currentScore - 10; 
+            currentScore = currentScore - 10;
         } else {
-            currentScore = currentScore - 1 - 10; 
+            currentScore = currentScore - 1 - 10;
         }
     }
     if (currentScore < 0) {
@@ -133,10 +136,49 @@ function createDrop() {
         secondNumber = Math.floor(Math.random() * firstNumber) + 1;
     } while (firstNumber % secondNumber !== 0);
 
-    const operator = ['+', '-', '*', '/'][Math.floor(Math.random() * 4)];
-    drop.innerHTML = `${firstNumber} ${operator} ${secondNumber}`;
+    const operator1 = '+'
+    const operator2 = ['+', '-'][Math.floor(Math.random() * 2)];
+    const operator3 = ['+', '-', '*'][Math.floor(Math.random() * 3)];
+    const operator4 = ['+', '-', '*', '/'][Math.floor(Math.random() * 4)];
+    // drop.innerHTML = `${firstNumber} ${operator} ${secondNumber}`;
 
-    drop.answer = eval(`${firstNumber} ${operator} ${secondNumber}`);
+    // drop.answer = eval(`${firstNumber} ${operator} ${secondNumber}`);
+
+    let selectedOperator
+
+    if (correctAnswers <= 10) {
+        selectedOperator = operator1;
+        drop.innerHTML = `${firstNumber} ${selectedOperator} ${secondNumber}`;
+    } else if (correctAnswers > 10 && correctAnswers <= 20) {
+        selectedOperator = operator2;
+        drop.innerHTML = `${firstNumber} ${selectedOperator} ${secondNumber}`;
+    } else if (correctAnswers > 20 && correctAnswers <= 30) {
+        selectedOperator = operator3;
+        drop.innerHTML = `${firstNumber} ${selectedOperator} ${secondNumber}`;
+    } else if (correctAnswers > 30) {
+        selectedOperator = operator4;
+        drop.innerHTML = `${firstNumber} ${selectedOperator} ${secondNumber}`;
+    }
+
+    let answer;
+    switch (selectedOperator) {
+        case '+':
+            answer = +firstNumber + +secondNumber;
+            break;
+        case '-':
+            answer = +firstNumber - +secondNumber;
+            break;
+        case '*':
+            answer = +firstNumber * +secondNumber;
+            break;
+        case '/':
+            answer = +firstNumber / +secondNumber;
+            break;
+    }
+
+    drop.answer = answer
+    console.log(drop.answer);
+
     drop.style.left = `${Math.floor(Math.random() * (fieldGame.clientWidth - 55)) + 5}px`;
     drop.style.top = '0px';
 
@@ -162,6 +204,7 @@ function animateDrop(drop) {
         if (wave.style.height === '210px') {
             alert('game over')
             finishGame()
+            clearInterval(checkInterval);
         }
     }, 500)
 }
@@ -174,7 +217,7 @@ function isDropInWave(drop) {
 
 // увеличить скорость 
 function increaseSpeed() {
-    console.log(correctAnswers, 1000000000000);
+    // console.log(correctAnswers, 1000000000000);
     const settings = {
         10: { interval: 4000, animationDuration: 45000 },
         20: { interval: 3500, animationDuration: 40000 },
@@ -191,7 +234,7 @@ function increaseSpeed() {
     }
 }
 
-const intervalId =  setInterval(createDrop, interval);
+const intervalId = setInterval(createDrop, interval);
 
 function finishGame() {
     clearInterval(intervalId)
@@ -200,3 +243,10 @@ function finishGame() {
     wrongAnswers = 0;
     currentScore = 0;
 }
+
+// анимиация 
+// function addShakeClass() {
+//     drops.forEach(drop => {
+//         drop.classList.add('shake');
+//     });
+// }
